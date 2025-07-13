@@ -1,19 +1,23 @@
 import styled from "styled-components";
 
 const Box = styled.div`
-  height: 80px;
+  height: 84px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   background-color: lightslategrey;
-  border-radius: 8px;
+  border-radius: 12px;
+  color: white;
   .date {
     font-size: 14px;
+    margin: 4px 8px 2px 8px;
   }
   .title {
-    font-size: 20px;
+    font-size: 18px;
+    margin: 0px 8px 2px 8px;
   }
   .contents {
-    font-size: 18px;
+    font-size: 16px;
   }
 `;
 interface INews {

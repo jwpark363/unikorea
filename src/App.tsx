@@ -1,15 +1,15 @@
 import styled from "styled-components";
 import SelectBox from "./components/SelectBox";
-import News from "./components/News";
-import { useEffect } from "react";
-import { GetDailyTrend } from "./api";
 import DailyTrend from "./DailyTrend";
+import { useAtomValue } from "jotai";
+import { DateAtom } from "./atom";
 
 const Container = styled.div`
   min-width: 420px;
-  max-width: 100%;
+  max-width: 1024px;
   width: 100vw;
   height: 100vh;
+  margin: 0px auto;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -38,20 +38,18 @@ const Bottom = styled.div`
   font-weight: bold;
 `;
 function App() {
-  useEffect(() => {
-    //fetch unikorea data
-    // (async () => {
-    //   const data = await GetDailyTrend();
-    //   console.log(data);
-    // })();
-    console.log("patch unikorea data");
-  }, []);
+  const dateAtom = useAtomValue(DateAtom);
+  const toDateFormat = (date?: string) =>
+    date ? `${date.slice(0, 4)}-${date.slice(4, 6)}-${date.slice(6)}` : "";
   return (
     <Container>
       <Title>북한 동향</Title>
       <SelectBox />
+      <div>
+        {toDateFormat(dateAtom?.startDate)} ~{toDateFormat(dateAtom?.endDate)}
+      </div>
       <ContentBox>
-        <DailyTrend start="20250601" end="20250607" />
+        <DailyTrend />
       </ContentBox>
       <Bottom>⚒️ Made by JayU</Bottom>
     </Container>

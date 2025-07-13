@@ -1,5 +1,8 @@
 import { useEffect, useState } from "react";
 import News from "./components/News";
+import { GetDailyTrend } from "./api";
+import { DateAtom } from "./atom";
+import { useAtomValue } from "jotai";
 
 interface ITrend {
   first_reg_ymd: string;
@@ -56,20 +59,25 @@ const sampleData: ITrendsData = {
   ],
   resultMsg: "normal_code",
 };
-interface IDailyTrend {
-  start: string;
-  end: string;
-}
-export default function DailyTrend({ start, end }: IDailyTrend) {
+export default function DailyTrend() {
+  const dateAtom = useAtomValue(DateAtom);
   const [data, setData] = useState<ITrendsData | null>(null);
   useEffect(() => {
-    console.log(start, end);
-    setData(sampleData);
-  }, []);
+    (async () => {
+      const json = await GetDailyTrend(dateAtom?.startDate, dateAtom?.endDate);
+      console.log(json);
+      setData(json);
+    })();
+  }, [dateAtom]);
   return data && data.resultCode === "0" ? (
     <>
-      {data.items.map((trend) => (
-        <News date={trend.first_reg_ymd} title={trend.sj} contents={trend.cn} />
+      {data.items.map((trend, i) => (
+        <News
+          key={i}
+          date={trend.first_reg_ymd}
+          title={trend.sj}
+          contents={trend.cn}
+        />
       ))}
     </>
   ) : null;
